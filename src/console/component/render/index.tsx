@@ -9,6 +9,11 @@ const map = {
 };
 
 export default ({ value, logprefix }: { value: string; logprefix: string }) => {
+  if (logprefix) {
+    const temp = value;
+    value = logprefix;
+    logprefix = temp;
+  }
   const VM = map[getJSType(value)] || (() => <div>{value.toString()}</div>);
   return (
     <div className="console-wrap">

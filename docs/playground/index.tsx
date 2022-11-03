@@ -4,9 +4,9 @@ import 'antd/dist/antd.css';
 import './index.less';
 
 const defualtCode = `
-import { Button } from 'antd'
+/*默认引入了antd、react、axios、moment包*/
 export default () => {
-  return <Button type="primary">Primary Button</Button>
+  return 'hellow word'
 }`;
 
 const CacheEditor = memo(
