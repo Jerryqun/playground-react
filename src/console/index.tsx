@@ -1,14 +1,14 @@
-import ReactDom from 'react-dom';
-import ConsoleRender from './component/render';
+import ReactDom from "react-dom";
+import ConsoleRender from "./component/render";
+
+export const consoleStore = [];
 
 export default {
-  print: (value, logprefix, target = '.playground-iframe-console-body') => {
-    const el = document.querySelector(target);
+  print: (value, log) => {
+    const el = document.querySelector(".playground-iframe-console-body");
+    consoleStore.push(<ConsoleRender value={value} log={log} />);
     if (el) {
-      ReactDom.render(
-        <ConsoleRender value={value} logprefix={logprefix} />,
-        el,
-      );
+      ReactDom.render(consoleStore, el);
     }
   },
 };
