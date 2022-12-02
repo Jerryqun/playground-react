@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import ReactDom from "react-dom";
 import { babelParse, decode } from "playground-react";
+import { ConsoleRender } from "gloden-console-render";
+
 import "./index.less";
 
 export default () => {
   const params: any = new URLSearchParams(location.hash.split("?")[1]);
-  const [console, setConsole] = useState(true);
+  const consoleInstance = ConsoleRender.create({
+    target: "#console-container",
+  });
+  const [flag, setFlag] = useState(true);
   // 解析
   const parseStringToModule = async () => {
     try {
@@ -29,6 +34,9 @@ export default () => {
     }
   };
   useEffect(() => {
+    // 监听日志打印
+    consoleInstance.listener();
+
     if (params.get("code")) {
       parseStringToModule();
     }
@@ -37,16 +45,18 @@ export default () => {
     <div className="playground-iframe">
       <div className="playground-iframe-app" />
       <div className="playground-iframe-console">
-        {console && (
+        {flag && (
           <div className="playground-iframe-console-header">控制台结果</div>
         )}
+
         <div
-          style={{ display: console ? "block" : "none" }}
+          id="console-container"
+          style={{ display: flag ? "block" : "none" }}
           className="playground-iframe-console-body"
         />
-        <button onClick={() => setConsole(!console)} className="console-btn">
+        <button onClick={() => setFlag(!flag)} className="console-btn">
           控制台
-          {!console ? (
+          {!flag ? (
             <span className="icon iconfont">&#xe614;</span>
           ) : (
             <span className="icon iconfont">&#xe63a;</span>

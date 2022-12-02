@@ -1,19 +1,18 @@
 /* eslint-disable */
-import { isEmpty } from '@/util';
-import BabelCompile from './babel-compile';
-import Editor from './editor';
-import Console from './console';
+import { isEmpty } from "@/util";
+import BabelCompile from "./babel-compile";
+import Editor from "./editor";
 
 /**
  * 解析
  */
 const babelParse = ({
-  code = '',
-  prefix = 'export default ',
+  code = "",
+  prefix = "export default ",
   // 默认依赖 react、antd
   dependencies = {
-    React: 'react',
-    antd: 'antd',
+    React: "react",
+    antd: "antd",
   },
   // 默认 default 导出
   exportDefault = true,
@@ -21,17 +20,17 @@ const babelParse = ({
 }) => {
   const babel = new BabelCompile(require);
   try {
-    let dependenciesString = '';
+    let dependenciesString = "";
     if (!isEmpty(dependencies)) {
       dependenciesString =
         Object.keys(dependencies)
           .map((key) => {
             return `import ${key} from '${dependencies[key]}';`;
           })
-          .join('\n') + '\n';
+          .join("\n") + "\n";
     }
     const res = babel.excuteCode(
-      `${dependenciesString}${prefix}${code.replaceAll('↵', '')}`,
+      `${dependenciesString}${prefix}${code.replaceAll("↵", "")}`
     );
     if (!res?.isError) {
       if (exportDefault) {
@@ -43,7 +42,7 @@ const babelParse = ({
       throw res?.error;
     }
   } catch (error) {
-    console.log('catch parse error:', error);
+    console.log("catch parse error:", error);
     throw error;
   }
 };
@@ -53,7 +52,7 @@ const encode = (str): string => {
     return btoa(encodeURIComponent(str));
   } catch (error) {
     console.log(error);
-    return '';
+    return "";
   }
 };
 
@@ -62,8 +61,8 @@ const decode = (str): string => {
     return decodeURIComponent(atob(str));
   } catch (error) {
     console.log(error);
-    return '';
+    return "";
   }
 };
 
-export { babelParse, BabelCompile, Editor, Console, encode, decode };
+export { babelParse, BabelCompile, Editor, encode, decode };
