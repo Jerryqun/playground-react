@@ -36,13 +36,7 @@ export default () => {
   useEffect(() => {
     // 监听日志打印
     consoleInstance.listener();
-    console.log(100, 'test', new Date(), Object, () => {}, null, undefined);
-    console.log(
-      [1, 2, 3, 4],
-      { name: 'test', age: { b: 1 } },
-      { address: 'test', liked: [1, 2, 3] },
-      [100, 200],
-    );
+
     if (params.get('code')) {
       parseStringToModule();
     }
