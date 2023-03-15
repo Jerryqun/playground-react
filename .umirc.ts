@@ -15,7 +15,7 @@ export default defineConfig({
   },
   publicPath:
     process.env.NODE_ENV === 'production' // 生产环境静态资源指向cdn
-      ? 'https://yun-static.cdn.bcebos.com/playground/'
+      ? '/'
       : '/',
   history: { type: 'hash' },
   extraBabelPlugins: [
