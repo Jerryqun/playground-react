@@ -8,4 +8,5 @@ declare module '*.json' {
 declare interface Window {
   require?: any;
   monaco?: any;
+  Babel?: any;
 }

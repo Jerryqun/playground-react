@@ -38,7 +38,7 @@ class BabelCompile {
     return res;
   };
   getES5Code = (code: string): any => {
-    const { transform } = (window as any).Babel;
+    const { transform } = window.Babel;
     try {
       const es5 = transform(code, {
         presets: ['env', 'react'],

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { isEmpty } from '@/util';
-import BabelCompile from './babel-compile';
+import BabelCompile from './tools/babel-compile';
 import Editor from './editor';
 
 /**
