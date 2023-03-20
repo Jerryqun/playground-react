@@ -1,42 +1,35 @@
-import React, { useState, memo } from 'react';
+import React, { useState } from 'react';
 import { Editor, encode, decode } from 'playground-react';
 import 'antd/dist/antd.css';
 import './index.less';
 
-const defualtCode = `
-/*默认引入了antd、react、axios、moment包*/
+const defualtCode = `import { Button } from 'antd';
 export default () => {
-  return 'hellow word'
+  return <Button>hello</Button>
 }`;
-
-const CacheEditor = memo(
-  ({ code, setCode }: any) => {
-    return (
-      <Editor
-        style={{
-          width: '60vw',
-          height: '100vh',
-        }}
-        value={code}
-        onSave={setCode}
-      />
-    );
-  },
-  () => {
-    return true;
-  },
-);
 
 export default () => {
   const params: any = new URLSearchParams(location.hash.split('?')[1]);
   const [code, setCode] = useState(
     params.get('code') ? decode(params.get('code')) : defualtCode,
   );
+  const codeRef = React.useRef<any>({});
+
+  const onSave = (value) => setCode(value);
+
   return (
     <div className="playground">
       <div className="playground-left">
-        <CacheEditor code={code} setCode={setCode} />
+        <Editor
+          mode="function"
+          language="typescript"
+          codeRef={codeRef}
+          style={{ width: '100%', height: '100vh' }}
+          value={defualtCode}
+          onSave={onSave}
+        />
       </div>
+
       <div className="playground-right">
         <iframe
           key={code}

@@ -1,6 +1,6 @@
 /* eslint-disable @iceworks/best-practices/recommend-polyfill */
 import { CodeEditor, CodeProps } from '../index';
-import { babelParse, babelParseCode } from '../tools';
+import { babelParse, babelParseCode } from '../../tools';
 import { debounce, isEmpty } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import './index.less';

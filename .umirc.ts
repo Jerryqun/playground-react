@@ -1,5 +1,5 @@
 import { defineConfig } from 'dumi';
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+// const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 export default defineConfig({
   mode: 'site',
@@ -42,12 +42,12 @@ export default defineConfig({
   navs: [
     null, // null 值代表保留约定式生成的导航，只做增量配置
   ],
-  chainWebpack: (config) => {
-    config.plugin('monaco-editor').use(MonacoWebpackPlugin, [
-      {
-        languages: ['javascript', 'typescript'],
-      },
-    ]);
-  },
+  // chainWebpack: (config) => {
+  //   config.plugin('monaco-editor').use(MonacoWebpackPlugin, [
+  //     {
+  //       languages: ['javascript', 'typescript'],
+  //     },
+  //   ]);
+  // },
   // more config: https://d.umijs.org/config
 });
