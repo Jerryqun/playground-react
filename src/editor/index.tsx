@@ -1,78 +1,152 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-bitwise */
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { useEffect, useRef, CSSProperties } from 'react';
+import { useEffect, useRef, CSSProperties, memo } from 'react';
+import FunctionEditor from './function-editor';
 import './index.less';
 
-export interface MonacoProps {
-  language?: string;
-  value: string;
-  originalValue?: string;
-  theme?: 'vs-dark' | 'vs';
-  style?: CSSProperties;
-  onChange?: Function;
-  onSave?: Function;
-  reload?: any;
-  options?: any;
-  className?: string;
-  onMount?: Function;
-  editorMonacoRef?: any;
+export interface CodeProps {
   id?: string;
-  mode?: 'nomal' | 'diff';
-  renderSideBySide?: boolean;
+  /**
+   * 语言设置
+   * @default javascript
+   */
+  language?: string;
+  /**
+   * 默认值
+   */
+  value?: string;
+  /**
+   * 主题
+   * @default vs-dark
+   */
+  theme?: 'vs-dark' | 'vs';
+  /**
+   * 是否展示小地图
+   * @default true
+   */
+  minimapEnabled?: boolean;
+  /** 容器样式 */
+  style?: CSSProperties;
+  /** onChange 钩子 */
+  onChange?: Function;
+  /** ctrl + s 钩子 */
+  onSave?: Function;
+  /** codeEditor 实例引用 */
+  codeRef?: any;
+  /** 使用 json 模式、函数模式、对比模式 */
+  mode?: 'json' | 'function' | 'diff';
+  /**
+   * 默认代码段
+   * @default () => {}
+   */
+  defaultCode?: string;
+  /**
+   * 没有改变代码自动设置为 undefined
+   * @default false
+   */
+  noChangeClearCode?: boolean;
+  /** 配置第三方依赖 */
+  require?: any;
+  /**
+   * 设置防抖时间(ms)
+   * @default 300
+   */
+  debounceTime?: number;
+  originalValue?: string;
+  /**
+   * 是否禁用
+   * @default false
+   */
+  readOnly?: boolean;
 }
 /**
  * 编辑器
  */
-export default ({
-  value = '',
-  onChange = () => {},
-  onSave = () => {},
-  language = 'javascript',
-  theme = 'vs-dark',
-  id = 'monaco-container',
-  editorMonacoRef = useRef<any>({}),
-  options = {},
-  ...rest
-}: MonacoProps) => {
-  useEffect(() => {
-    const monacoInstance: monaco.editor.IStandaloneCodeEditor =
-      monaco.editor.create(document.getElementById(id), {
-        value,
-        language,
-        selectOnLineNumbers: true,
-        automaticLayout: true,
-        tabSize: 2,
-        fontSize: 14,
-        theme,
-        fontWeight: '500',
-        minimap: {
-          enabled: false,
-        },
-        ...options,
-        ...rest,
-      });
-    // ctrl + s 执行 onSave
-    monacoInstance.addCommand(
-      monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
-      () => {
-        const code = monacoInstance.getValue();
-        onSave(code);
-      },
-    );
-    // onChange
-    monacoInstance.onDidChangeModelContent((e) => {
-      const code = monacoInstance.getValue();
-      if (!e.isFlush) {
-        onChange(code);
+export const CodeEditor = memo(
+  ({
+    id = `code-container-${Math.random()}`,
+    value = '',
+    onChange = () => {},
+    onSave = () => {},
+    style = {},
+    language = 'javascript',
+    theme = 'vs-dark',
+    codeRef = useRef<any>({}),
+    minimapEnabled = true,
+    ...rest
+  }: CodeProps) => {
+    // 加载资源
+    const initialLoad = async () => {
+      const _require: any = window.require;
+      if (_require) {
+        _require.config({
+          paths: {
+            vs: 'https://g.alicdn.com/code/lib/monaco-editor/0.36.0/min/vs',
+          },
+        });
+        return new Promise((res) => {
+          _require(['vs/editor/editor.main'], () => {
+            const _code: any = window.monaco;
+            const codeInstance = _code.editor.create(
+              document.getElementById(id),
+              {
+                language,
+                selectOnLineNumbers: true,
+                automaticLayout: true,
+                tabSize: 2,
+                fontSize: 14,
+                theme,
+                fontWeight: '400',
+                minimap: {
+                  enabled: minimapEnabled,
+                },
+                scrollBeyondLastLine: false,
+                value,
+                ...rest,
+              },
+            );
+            // ctrl + s 执行 onSave
+            codeInstance.addCommand(
+              _code.KeyMod.CtrlCmd | _code.KeyCode.KeyS,
+              () => {
+                const code = codeInstance.getValue();
+                onSave(code);
+              },
+            );
+            // onChange
+            codeInstance.onDidChangeModelContent((e) => {
+              const code = codeInstance.getValue();
+              if (!e.isFlush) {
+                onChange(code);
+              }
+            });
+            res(codeInstance);
+          });
+        });
       }
-    });
-    editorMonacoRef.current = monacoInstance; // 挂到ref
-  }, []);
-  // update
-  useEffect(() => {
-    if (editorMonacoRef.current) {
-      editorMonacoRef.current.setValue?.(value);
-    }
-  }, [value]);
-  return <div id={id} className="app-monaco-editor" />;
+    };
+    useEffect(() => {
+      const monacoInstance = initialLoad();
+      // 挂到ref
+      codeRef.current.getMonacoInstance = async () => {
+        return monacoInstance;
+      };
+    }, []);
+    // 更新值
+    useEffect(() => {
+      codeRef.current.getMonacoInstance().then((instance) => {
+        instance.setValue(value);
+      });
+    }, [value]);
+    return <div id={id} className="app-code-editor" style={style} />;
+  },
+  () => true, // 设置下缓存组件
+);
+
+export default ({ mode, ...props }: CodeProps) => {
+  if (mode === 'function') {
+    return <FunctionEditor {...props} />;
+  }
+
+  return <CodeEditor {...props} />;
 };
