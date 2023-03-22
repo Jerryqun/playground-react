@@ -35,7 +35,6 @@ export default defineConfig({
     },
   ],
   scripts: [
-    'https://g.alicdn.com/code/lib/less.js/4.1.3/less.js',
     'https://g.alicdn.com/code/lib/babel-standalone/7.21.2/babel.min.js',
     'https://g.alicdn.com/code/lib/monaco-editor/0.36.0/min/vs/loader.min.js',
   ],
