@@ -19,6 +19,7 @@ export default ({
   const [errorInfo, setErrorInfo] = useState('');
   const [fullScreen, setFullScreen] = useState(false);
   const valueRef = useRef(value);
+
   useEffect(() => {
     Object.assign(codeRef.current, {
       getModuleDefault: () => {

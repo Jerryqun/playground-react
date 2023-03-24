@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Editor, encode, decode } from 'playground-react';
+import React, { useEffect, useState } from 'react';
+import { Editor, encode } from 'playground-react';
 import 'antd/dist/antd.css';
 import './index.less';
+
+const key = 'react-playground-code';
 
 const defualtCode = `import { Button } from 'antd';
 export default () => {
@@ -9,10 +11,13 @@ export default () => {
 }`;
 
 export default () => {
-  const params: any = new URLSearchParams(location.hash.split('?')[1]);
-  const [code, setCode] = useState(
-    params.get('code') ? decode(params.get('code')) : defualtCode,
-  );
+  const [code, setCode] = useState(localStorage.getItem(key) || defualtCode);
+  useEffect(() => {
+    code && localStorage.setItem(key, code);
+    return () => {
+      localStorage.removeItem(key);
+    };
+  }, [code]);
   const codeRef = React.useRef<any>({});
 
   const onSave = (value) => setCode(value);
@@ -25,9 +30,20 @@ export default () => {
           language="typescript"
           codeRef={codeRef}
           style={{ width: '100%', height: '100vh' }}
-          value={defualtCode}
+          value={code}
           onSave={onSave}
         />
+        <button
+          onClick={() => {
+            setCode(defualtCode);
+            codeRef.current.getMonacoInstance().then((instance) => {
+              instance.setValue(defualtCode);
+            });
+          }}
+          className="reset"
+        >
+          重置
+        </button>
       </div>
 
       <div className="playground-right">

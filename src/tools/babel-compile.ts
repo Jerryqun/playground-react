@@ -49,6 +49,15 @@ class BabelCompile {
         }`,
         {
           presets: ['env', 'react'],
+          // 支持tsx转换
+          plugins: [
+            [
+              'transform-typescript',
+              {
+                isTSX: true,
+              },
+            ],
+          ],
         },
       ).code;
       return transfromCode;

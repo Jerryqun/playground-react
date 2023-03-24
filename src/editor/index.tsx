@@ -87,6 +87,34 @@ export const CodeEditor = memo(
         return new Promise((res) => {
           _require(['vs/editor/editor.main'], () => {
             const _code: any = window.monaco;
+            _code.languages.register({
+              id: 'tsx',
+              extensions: ['.tsx'],
+              aliases: ['TypeScript React'],
+              mimetypes: ['text/tsx'],
+            });
+
+            _code.languages.onLanguage('tsx', function () {
+              _code.editor.defineTheme('myTheme', {
+                base: 'vs',
+                inherit: false,
+                rules: [{ token: 'comment', foreground: 'ffa500' }],
+              });
+
+              _code.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
+                {
+                  noSemanticValidation: false,
+                  noSyntaxValidation: false,
+                },
+              );
+
+              _code.languages.typescript.typescriptDefaults.setCompilerOptions({
+                target: _code.languages.typescript.ScriptTarget.ES6,
+                jsx: _code.languages.typescript.JsxEmit.React,
+                allowJs: true,
+              });
+            });
+
             const codeInstance = _code.editor.create(
               document.getElementById(id),
               {
@@ -125,6 +153,12 @@ export const CodeEditor = memo(
         });
       }
     };
+    // 更新值
+    // useEffect(() => {
+    //   codeRef.current.getMonacoInstance().then((instance) => {
+    //     instance.setValue(value);
+    //   });
+    // }, [value]);
     useEffect(() => {
       const monacoInstance = initialLoad();
       // 挂到ref
@@ -132,12 +166,6 @@ export const CodeEditor = memo(
         return monacoInstance;
       };
     }, []);
-    // 更新值
-    useEffect(() => {
-      codeRef.current.getMonacoInstance().then((instance) => {
-        instance.setValue(value);
-      });
-    }, [value]);
     return <div id={id} className="app-code-editor" style={style} />;
   },
   () => true, // 设置下缓存组件
