@@ -1805,25 +1805,59 @@
                               'return',
                               new Promise((e) => {
                                 t(['vs/editor/editor.main'], () => {
-                                  var t = window.monaco,
-                                    r = t.editor.create(
-                                      document.getElementById(n),
-                                      Object(i['a'])(
-                                        {
-                                          language: b,
-                                          selectOnLineNumbers: !0,
-                                          automaticLayout: !0,
-                                          tabSize: 2,
-                                          fontSize: 14,
-                                          theme: w,
-                                          fontWeight: '400',
-                                          minimap: { enabled: x },
-                                          scrollBeyondLastLine: !1,
-                                          value: a,
-                                        },
-                                        E,
-                                      ),
-                                    );
+                                  var t = window.monaco;
+                                  t.languages.register({
+                                    id: 'tsx',
+                                    extensions: ['.tsx'],
+                                    aliases: ['TypeScript React'],
+                                    mimetypes: ['text/tsx'],
+                                  }),
+                                    t.languages.onLanguage('tsx', function () {
+                                      t.editor.defineTheme('myTheme', {
+                                        base: 'vs',
+                                        inherit: !1,
+                                        rules: [
+                                          {
+                                            token: 'comment',
+                                            foreground: 'ffa500',
+                                          },
+                                        ],
+                                      }),
+                                        t.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
+                                          {
+                                            noSemanticValidation: !1,
+                                            noSyntaxValidation: !1,
+                                          },
+                                        ),
+                                        t.languages.typescript.typescriptDefaults.setCompilerOptions(
+                                          {
+                                            target:
+                                              t.languages.typescript
+                                                .ScriptTarget.ES6,
+                                            jsx: t.languages.typescript.JsxEmit
+                                              .React,
+                                            allowJs: !0,
+                                          },
+                                        );
+                                    });
+                                  var r = t.editor.create(
+                                    document.getElementById(n),
+                                    Object(i['a'])(
+                                      {
+                                        language: b,
+                                        selectOnLineNumbers: !0,
+                                        automaticLayout: !0,
+                                        tabSize: 2,
+                                        fontSize: 14,
+                                        theme: w,
+                                        fontWeight: '400',
+                                        minimap: { enabled: x },
+                                        scrollBeyondLastLine: !1,
+                                        value: a,
+                                      },
+                                      E,
+                                    ),
+                                  );
                                   r.addCommand(
                                     t.KeyMod.CtrlCmd | t.KeyCode.KeyS,
                                     () => {
@@ -1869,11 +1903,6 @@
                 }),
               );
             }, []),
-            Object(u['useEffect'])(() => {
-              k.current.getMonacoInstance().then((e) => {
-                e.setValue(a);
-              });
-            }, [a]),
             d.a.createElement('div', {
               id: n,
               className: 'app-code-editor',
@@ -26848,19 +26877,24 @@
       a = n('xwgP'),
       o = n.n(a),
       i = n('/7QA'),
-      c =
-        (n('NeyN'),
-        n('jWZQ'),
-        "import { Button } from 'antd';\nexport default () => {\n  return <Button>hello</Button>\n}");
+      c = (n('NeyN'), n('jWZQ'), 'react-playground-code'),
+      l =
+        "import { Button } from 'antd';\nexport default () => {\n  return <Button>hello</Button>\n}";
     t['default'] = () => {
-      var e = new URLSearchParams(location.hash.split('?')[1]),
-        t = Object(a['useState'])(
-          e.get('code') ? Object(i['c'])(e.get('code')) : c,
+      var e = Object(a['useState'])(localStorage.getItem(c) || l),
+        t = Object(r['a'])(e, 2),
+        n = t[0],
+        s = t[1];
+      Object(a['useEffect'])(
+        () => (
+          n && localStorage.setItem(c, n),
+          () => {
+            localStorage.removeItem(c);
+          }
         ),
-        n = Object(r['a'])(t, 2),
-        l = n[0],
-        s = n[1],
-        u = o.a.useRef({}),
+        [n],
+      );
+      var u = o.a.useRef({}),
         d = (e) => s(e);
       return o.a.createElement(
         'div',
@@ -26873,18 +26907,31 @@
             language: 'typescript',
             codeRef: u,
             style: { width: '100%', height: '100vh' },
-            value: c,
+            value: n,
             onSave: d,
           }),
+          o.a.createElement(
+            'button',
+            {
+              onClick: () => {
+                s(l),
+                  u.current.getMonacoInstance().then((e) => {
+                    e.setValue(l);
+                  });
+              },
+              className: 'reset',
+            },
+            '\u91cd\u7f6e',
+          ),
         ),
         o.a.createElement(
           'div',
           { className: 'playground-right' },
           o.a.createElement('iframe', {
-            key: l,
+            key: n,
             src: ''
               .concat(location.pathname, '#/~demos/docs-iframe?code=')
-              .concat(Object(i['d'])(l)),
+              .concat(Object(i['d'])(n)),
           }),
         ),
       );
@@ -38046,9 +38093,9 @@
       s =
         "@import url('../../src/icon/icon.css');\n.console-wrap {\n  padding-bottom: 34px;\n}\n.playground-iframe {\n  height: 100vh;\n  width: 100%;\n  color: #333;\n  .playground-iframe-app {\n    height: calc(100vh - 300px);\n    .playground-error-info {\n      color: rgb(252, 96, 96);\n      font-weight: 600;\n      width: 100%;\n      height: 100%;\n      padding: 4px 10px;\n      font-size: 14px;\n    }\n  }\n  .playground-iframe-console {\n    height: 300px;\n    position: relative;\n    .console-btn {\n      position: absolute;\n      bottom: 10px;\n      left: 10px;\n      cursor: pointer;\n      border: none;\n    }\n    &-header {\n      height: 30px;\n      background: #f8f8f8;\n      color: #999;\n      display: flex;\n      align-items: center;\n      padding: 0 10px;\n    }\n    &-body {\n      height: 270px;\n      overflow: auto;\n      padding: 10px;\n    }\n  }\n}",
       u =
-        "import React, { useState } from 'react';\nimport { Editor, encode, decode } from 'playground-react';\nimport 'antd/dist/antd.css';\nimport './index.less';\n\nconst defualtCode = `import { Button } from 'antd';\nexport default () => {\n  return <Button>hello</Button>\n}`;\n\nexport default () => {\n  const params: any = new URLSearchParams(location.hash.split('?')[1]);\n  const [code, setCode] = useState(\n    params.get('code') ? decode(params.get('code')) : defualtCode,\n  );\n  const codeRef = React.useRef<any>({});\n\n  const onSave = (value) => setCode(value);\n\n  return (\n    <div className=\"playground\">\n      <div className=\"playground-left\">\n        <Editor\n          mode=\"function\"\n          language=\"typescript\"\n          codeRef={codeRef}\n          style={{ width: '100%', height: '100vh' }}\n          value={defualtCode}\n          onSave={onSave}\n        />\n      </div>\n\n      <div className=\"playground-right\">\n        <iframe\n          key={code}\n          src={`${location.pathname}#/~demos/docs-iframe?code=${encode(code)}`}\n        />\n      </div>\n    </div>\n  );\n};",
+        "import React, { useEffect, useState } from 'react';\nimport { Editor, encode } from 'playground-react';\nimport 'antd/dist/antd.css';\nimport './index.less';\n\nconst key = 'react-playground-code';\n\nconst defualtCode = `import { Button } from 'antd';\nexport default () => {\n  return <Button>hello</Button>\n}`;\n\nexport default () => {\n  const [code, setCode] = useState(localStorage.getItem(key) || defualtCode);\n  useEffect(() => {\n    code && localStorage.setItem(key, code);\n    return () => {\n      localStorage.removeItem(key);\n    };\n  }, [code]);\n  const codeRef = React.useRef<any>({});\n\n  const onSave = (value) => setCode(value);\n\n  return (\n    <div className=\"playground\">\n      <div className=\"playground-left\">\n        <Editor\n          mode=\"function\"\n          language=\"typescript\"\n          codeRef={codeRef}\n          style={{ width: '100%', height: '100vh' }}\n          value={code}\n          onSave={onSave}\n        />\n        <button\n          onClick={() => {\n            setCode(defualtCode);\n            codeRef.current.getMonacoInstance().then((instance) => {\n              instance.setValue(defualtCode);\n            });\n          }}\n          className=\"reset\"\n        >\n          \u91cd\u7f6e\n        </button>\n      </div>\n\n      <div className=\"playground-right\">\n        <iframe\n          key={code}\n          src={`${location.pathname}#/~demos/docs-iframe?code=${encode(code)}`}\n        />\n      </div>\n    </div>\n  );\n};",
       d =
-        '.playground {\n  display: flex;\n  height: 100vh;\n  overflow: hidden;\n  .playground-left {\n    position: relative;\n    height: 100%;\n    width: 50%;\n  }\n  .playground-right {\n    position: relative;\n    height: 100%;\n    width: 50%;\n    iframe {\n      border: none;\n      width: 100%;\n      height: 100%;\n    }\n  }\n}',
+        '.playground {\n  display: flex;\n  height: 100vh;\n  overflow: hidden;\n  .playground-left {\n    position: relative;\n    height: 100%;\n    width: 50%;\n  }\n  .playground-right {\n    position: relative;\n    height: 100%;\n    width: 50%;\n    iframe {\n      border: none;\n      width: 100%;\n      height: 100%;\n    }\n  }\n  .reset {\n    position: fixed;\n    left: 10px;\n    bottom: 10px;\n    cursor: pointer;\n    border: 1px solid #eee;\n    border-radius: 4px;\n  }\n}',
       f = {
         'docs-demo': {
           component: function () {
@@ -59209,7 +59256,10 @@
                     n,
                     ';\n        }',
                   ),
-                  { presets: ['env', 'react'] },
+                  {
+                    presets: ['env', 'react'],
+                    plugins: [['transform-typescript', { isTSX: !0 }]],
+                  },
                 ).code;
               return r;
             } catch (a) {
