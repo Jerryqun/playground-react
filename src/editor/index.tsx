@@ -2,6 +2,8 @@
 /* eslint-disable no-bitwise */
 import { useEffect, useRef, CSSProperties, memo } from 'react';
 import FunctionEditor from './function-editor';
+import { textMateService } from './syntaxHighlighter';
+import loader from '@monaco-editor/loader';
 import './index.less';
 
 export interface CodeProps {
@@ -34,7 +36,7 @@ export interface CodeProps {
   /** codeEditor 实例引用 */
   codeRef?: any;
   /** 使用 json 模式、函数模式、对比模式 */
-  mode?: 'json' | 'function' | 'diff';
+  mode?: 'json' | 'function' | 'diff' | 'less';
   /**
    * 默认代码段
    * @default () => {}
@@ -58,6 +60,12 @@ export interface CodeProps {
    * @default false
    */
   readOnly?: boolean;
+  /** cdnPath 地址
+   * @default https://g.alicdn.com/code/lib/monaco-editor/0.36.0/min/vs
+   */
+  cdnPath?: string;
+  /** 加载完毕钩子 */
+  onLoad?: Function;
 }
 /**
  * 编辑器
@@ -67,98 +75,83 @@ export const CodeEditor = memo(
     id = `code-container-${Math.random()}`,
     value = '',
     onChange = () => {},
-    onSave = () => {},
+    onSave,
     style = {},
     language = 'javascript',
     theme = 'vs-dark',
     codeRef = useRef<any>({}),
     minimapEnabled = true,
+    onLoad = () => {},
+    cdnPath = 'https://g.alicdn.com/code/lib/monaco-editor/0.36.1/min/vs', // '/monaco/min/vs',
     ...rest
   }: CodeProps) => {
+    const oldDecorationsRef = useRef({});
+    /** 创建实例 */
+    const createInstance = (monaco: any) => {
+      const codeInstance = monaco.editor.create(document.getElementById(id), {
+        language,
+        selectOnLineNumbers: true,
+        automaticLayout: true,
+        tabSize: 2,
+        fontSize: 14,
+        theme,
+        fontWeight: '400',
+        minimap: {
+          enabled: minimapEnabled,
+        },
+        scrollBeyondLastLine: false,
+        value,
+        ...rest,
+      });
+      if (typeof onSave === 'function') {
+        // ctrl + s 执行 onSave
+        codeInstance.addCommand(
+          monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
+          () => {
+            const code = codeInstance.getValue();
+            onSave(code);
+          },
+        );
+      }
+
+      // onChange
+      codeInstance.onDidChangeModelContent((e) => {
+        const code = codeInstance.getValue();
+        if (['javascript', 'typescript'].includes(language)) {
+          oldDecorationsRef.current = codeInstance.deltaDecorations(
+            oldDecorationsRef.current,
+            textMateService(code),
+          );
+        }
+        if (!e.isFlush) {
+          onChange(code);
+        }
+      });
+      return codeInstance;
+    };
     // 加载资源
     const initialLoad = async () => {
-      const _require: any = window.require;
-      if (_require) {
-        _require.config({
-          paths: {
-            vs: 'https://g.alicdn.com/code/lib/monaco-editor/0.36.0/min/vs',
-          },
+      // 配置资源CDN
+      loader.config({
+        paths: {
+          vs: cdnPath,
+        },
+      });
+      return new Promise((res) => {
+        loader.init().then((monaco) => {
+          onLoad(monaco); // 编辑器加载完毕
+          if (
+            typeof (window as any).define === 'function' &&
+            (window as any).define.amd
+          ) {
+            // make monaco-editor's loader work with webpack's umd loader
+            // @see https://github.com/microsoft/monaco-editor/issues/2283
+            delete (window as any).define.amd;
+          }
+          res(createInstance(monaco));
         });
-        return new Promise((res) => {
-          _require(['vs/editor/editor.main'], () => {
-            const _code: any = window.monaco;
-            _code.languages.register({
-              id: 'tsx',
-              extensions: ['.tsx'],
-              aliases: ['TypeScript React'],
-              mimetypes: ['text/tsx'],
-            });
-
-            _code.languages.onLanguage('tsx', function () {
-              _code.editor.defineTheme('myTheme', {
-                base: 'vs',
-                inherit: false,
-                rules: [{ token: 'comment', foreground: 'ffa500' }],
-              });
-
-              _code.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
-                {
-                  noSemanticValidation: false,
-                  noSyntaxValidation: false,
-                },
-              );
-
-              _code.languages.typescript.typescriptDefaults.setCompilerOptions({
-                target: _code.languages.typescript.ScriptTarget.ES6,
-                jsx: _code.languages.typescript.JsxEmit.React,
-                allowJs: true,
-              });
-            });
-
-            const codeInstance = _code.editor.create(
-              document.getElementById(id),
-              {
-                language,
-                selectOnLineNumbers: true,
-                automaticLayout: true,
-                tabSize: 2,
-                fontSize: 14,
-                theme,
-                fontWeight: '400',
-                minimap: {
-                  enabled: minimapEnabled,
-                },
-                scrollBeyondLastLine: false,
-                value,
-                ...rest,
-              },
-            );
-            // ctrl + s 执行 onSave
-            codeInstance.addCommand(
-              _code.KeyMod.CtrlCmd | _code.KeyCode.KeyS,
-              () => {
-                const code = codeInstance.getValue();
-                onSave(code);
-              },
-            );
-            // onChange
-            codeInstance.onDidChangeModelContent((e) => {
-              const code = codeInstance.getValue();
-              if (!e.isFlush) {
-                onChange(code);
-              }
-            });
-            res(codeInstance);
-          });
-        });
-      }
+      });
     };
-    // 更新值
-    // useEffect(() => {
-    //   codeRef.current.getMonacoInstance().then((instance) => {
-    //     instance.setValue(value);
-    //   });
-    // }, [value]);
     useEffect(() => {
       const monacoInstance = initialLoad();
       // 挂到ref
@@ -166,9 +159,18 @@ export const CodeEditor = memo(
         return monacoInstance;
       };
     }, []);
+    // 更新值
+    useEffect(() => {
+      codeRef.current.getMonacoInstance().then((instance) => {
+        if (instance) {
+          if (!instance.hasTextFocus?.()) {
+            instance.setValue?.(value);
+          }
+        }
+      });
+    }, [value]);
     return <div id={id} className="app-code-editor" style={style} />;
   },
-  () => true, // 设置下缓存组件
 );
 
 export default ({ mode, ...props }: CodeProps) => {

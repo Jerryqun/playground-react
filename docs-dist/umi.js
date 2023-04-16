@@ -1518,16 +1518,16 @@
   '/7QA': function (e, t, n) {
     'use strict';
     n.d(t, 'b', function () {
-      return k;
+      return We;
     }),
       n.d(t, 'a', function () {
-        return O;
+        return ze;
       }),
       n.d(t, 'd', function () {
-        return j;
+        return Ke;
       }),
       n.d(t, 'c', function () {
-        return x;
+        return Ve;
       });
     var r = (e) =>
         null === e ||
@@ -1539,8 +1539,8 @@
           : 'object' === typeof e && 0 === Object.keys(e).length),
       a = n('oOg3'),
       o = n('JrZZ'),
-      i = n('kZID'),
-      c = n('duuc');
+      i = n('duuc'),
+      c = n('kZID');
     function l(e, t) {
       if (null == e) return {};
       var n,
@@ -1631,68 +1631,68 @@
           n = e.onChange,
           r = void 0 === n ? () => {} : n,
           a = e.style,
-          i = void 0 === a ? { height: 300, width: 360 } : a,
+          c = void 0 === a ? { height: 300, width: 360 } : a,
           l = e.defaultCode,
           b = void 0 === l ? '() => {}' : l,
           y = e.noChangeClearCode,
           _ = void 0 !== y && y,
-          O = e.codeRef,
-          k = void 0 === O ? Object(u['useRef'])({}) : O,
-          j = e.require,
-          x = e.debounceTime,
-          E = void 0 === x ? 100 : x,
-          M = s(e, g),
-          S = Object(u['useState'])(''),
-          C = Object(p['a'])(S, 2),
-          L = C[0],
-          T = C[1],
-          D = Object(u['useState'])(!1),
-          N = Object(p['a'])(D, 2),
-          P = N[0],
-          Y = N[1],
-          A = Object(u['useRef'])(t);
+          w = e.codeRef,
+          O = void 0 === w ? Object(u['useRef'])({}) : w,
+          k = e.require,
+          j = e.debounceTime,
+          x = void 0 === j ? 100 : j,
+          E = s(e, g),
+          M = Object(u['useState'])(''),
+          S = Object(p['a'])(M, 2),
+          C = S[0],
+          L = S[1],
+          T = Object(u['useState'])(!1),
+          D = Object(p['a'])(T, 2),
+          N = D[0],
+          P = D[1],
+          Y = Object(u['useRef'])(t);
         return (
           Object(u['useEffect'])(() => {
-            Object.assign(k.current, {
-              getModuleDefault: () => m({ code: A.current, require: j }),
+            Object.assign(O.current, {
+              getModuleDefault: () => m({ code: Y.current, require: k }),
               getModule: () =>
-                m({ code: A.current, exportDefault: !1, require: j }),
-              getEs5Code: () => h({ code: A.current, require: j }),
+                m({ code: Y.current, exportDefault: !1, require: k }),
+              getEs5Code: () => h({ code: Y.current, require: k }),
             });
           }, []),
           d.a.createElement(
             'div',
             {
-              className: P ? 'function_data_box_full' : 'function_data_box',
-              style: i,
+              className: N ? 'function_data_box_full' : 'function_data_box',
+              style: c,
             },
-            L &&
+            C &&
               d.a.createElement(
                 'div',
                 { className: 'function_data_error_info' },
-                L,
+                C,
               ),
             d.a.createElement(
               'div',
               { className: 'function_data_box_full_screen' },
               d.a.createElement('i', {
-                className: P
+                className: N
                   ? 'iconfont spicon-fullscreen-exit'
                   : 'iconfont spicon-fullscreen',
                 onClick: () => {
-                  Y(!P);
+                  P(!N);
                 },
               }),
             ),
             d.a.createElement(
-              w,
-              Object(f['a'])({ minimapEnabled: !1 }, M, {
-                codeRef: k,
+              Fe,
+              Object(f['a'])({ minimapEnabled: !1 }, E, {
+                codeRef: O,
                 value: t || b,
                 language: 'javascript',
                 onChange: Object(v['debounce'])(
                   (function () {
-                    var e = Object(c['a'])(
+                    var e = Object(i['a'])(
                       Object(o['a'])().mark(function e(t) {
                         return Object(o['a'])().wrap(
                           function (e) {
@@ -1709,23 +1709,23 @@
                                     e.next = 4;
                                     break;
                                   }
-                                  return T(''), e.abrupt('return', r(void 0));
+                                  return L(''), e.abrupt('return', r(void 0));
                                 case 4:
                                   return (
                                     (e.next = 6),
                                     new Promise((e) => setTimeout(e, 1e3))
                                   );
                                 case 6:
-                                  m({ code: t, require: j }),
+                                  m({ code: t, require: k }),
                                     r(t),
-                                    (A.current = t),
-                                    T(''),
+                                    (Y.current = t),
+                                    L(''),
                                     (e.next = 15);
                                   break;
                                 case 12:
                                   (e.prev = 12),
                                     (e.t0 = e['catch'](0)),
-                                    T(e.t0.toString());
+                                    L(e.t0.toString());
                                 case 15:
                                 case 'end':
                                   return e.stop();
@@ -1741,14 +1741,623 @@
                       return e.apply(this, arguments);
                     };
                   })(),
-                  E,
+                  x,
                 ),
               }),
             ),
           )
         );
       },
-      y =
+      y = (e, t) => {
+        var n = 0,
+          r = 0;
+        while (r + t[n] < e) (r += t[n] + 1), (n += 1);
+        return { line: n + 1, offset: r };
+      },
+      _ = (e) => {
+        if (!Array.isArray(e.content)) return [e];
+        var t = '</' === e.content[0].content[0].content;
+        if (t)
+          return [
+            { type: 'end-tag-start', content: '</', length: 2 },
+            {
+              type: 'end-tag-name',
+              content: e.content[0].content[1],
+              length: e.content[0].content[1].length,
+            },
+            ...e.content.slice(1, e.content.length - 1),
+            { type: 'end-tag-end', content: '>', length: 1 },
+          ];
+        var n = [...e.content],
+          r = [];
+        while (n.length) {
+          var a = n.shift();
+          if (/attr-name|attr-value/.test(a.type)) r.push(a);
+          else if (/spread/.test(a.type))
+            r.push(
+              Object(c['a'])(
+                Object(c['a'])({}, a.content[0]),
+                {},
+                { type: 'jsx-exp-start' },
+              ),
+            ),
+              r.push.apply(r, a.content.slice(1, a.content.length - 1)),
+              r.push(
+                Object(c['a'])(
+                  Object(c['a'])({}, a.content[a.content.length - 1]),
+                  {},
+                  { type: 'jsx-exp-end' },
+                ),
+              );
+          else if ('script' === a.type) {
+            var o = a.content.findIndex((e) => '{' === e.content);
+            r.push.apply(r, [
+              ...a.content.slice(0, o),
+              Object(c['a'])(
+                Object(c['a'])({}, a.content[o]),
+                {},
+                { type: 'jsx-exp-start' },
+              ),
+              ...a.content.slice(o + 1, a.content.length - 1),
+              Object(c['a'])(
+                Object(c['a'])({}, a.content[a.content.length - 1]),
+                {},
+                { type: 'jsx-exp-end' },
+              ),
+            ]);
+          } else
+            Array.isArray(a.content) ? (n = [...a.content, ...n]) : r.push(a);
+        }
+        return (
+          (r[0].type = 'tag-start'),
+          (r[1] = {
+            type: 'start-tag-name',
+            length: r[1].length,
+            content: r[1],
+          }),
+          (r[r.length - 1].type = 'tag-end'),
+          r
+        );
+      },
+      w = (e) =>
+        e.reduce(
+          (e, t) => ('tag' === t.type ? e.push.apply(e, _(t)) : e.push(t), e),
+          [],
+        ),
+      O = (e) => {
+        var t = window,
+          n = t.Prism;
+        try {
+          var r = n.tokenize(e, n.languages.jsx),
+            a = {
+              code: e,
+              grammar: n.languages.jsx,
+              language: 'jsx',
+              tokens: r,
+            };
+          n.hooks.run('after-tokenize', a), (r = w(r));
+          var o = [],
+            i = 0,
+            c = e.split('\n').map((e) => e.length);
+          return (
+            r.forEach((e) => {
+              if ('string' === typeof e) {
+                if ('console' !== e) return void (i += e.length);
+                e = { content: 'console', type: 'globals', length: 7 };
+              }
+              var t = y(i, c),
+                n = t.offset,
+                r = t.line,
+                a = y(i + e.length, c),
+                l = a.offset,
+                s = a.line,
+                u = e.type;
+              'keyword' === u && (u = ''.concat(e.content, '-keyword')),
+                'constructor' === e.content &&
+                  'function' === e.type &&
+                  (u = 'constructor-keyword'),
+                '=>' === e.content && (u = 'arrow-operator'),
+                o.push({
+                  start: i + 1 - n,
+                  end: i + 1 + e.length - l,
+                  kind: u,
+                  startLine: r,
+                  endLine: s,
+                }),
+                (i += e.length);
+            }),
+            o.map((e) => ({
+              range: new window.monaco.Range(
+                e.startLine,
+                e.start,
+                e.endLine,
+                e.end,
+              ),
+              options: { inlineClassName: e.kind },
+            }))
+          );
+        } catch (l) {
+          console.log('exp:', l);
+        }
+      };
+    function k(e, t, n) {
+      return (
+        t in e
+          ? Object.defineProperty(e, t, {
+              value: n,
+              enumerable: !0,
+              configurable: !0,
+              writable: !0,
+            })
+          : (e[t] = n),
+        e
+      );
+    }
+    function j(e, t) {
+      var n = Object.keys(e);
+      if (Object.getOwnPropertySymbols) {
+        var r = Object.getOwnPropertySymbols(e);
+        t &&
+          (r = r.filter(function (t) {
+            return Object.getOwnPropertyDescriptor(e, t).enumerable;
+          })),
+          n.push.apply(n, r);
+      }
+      return n;
+    }
+    function x(e) {
+      for (var t = 1; t < arguments.length; t++) {
+        var n = null != arguments[t] ? arguments[t] : {};
+        t % 2
+          ? j(Object(n), !0).forEach(function (t) {
+              k(e, t, n[t]);
+            })
+          : Object.getOwnPropertyDescriptors
+          ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(n))
+          : j(Object(n)).forEach(function (t) {
+              Object.defineProperty(
+                e,
+                t,
+                Object.getOwnPropertyDescriptor(n, t),
+              );
+            });
+      }
+      return e;
+    }
+    function E(e, t) {
+      if (null == e) return {};
+      var n,
+        r,
+        a = {},
+        o = Object.keys(e);
+      for (r = 0; r < o.length; r++)
+        (n = o[r]), t.indexOf(n) >= 0 || (a[n] = e[n]);
+      return a;
+    }
+    function M(e, t) {
+      if (null == e) return {};
+      var n,
+        r,
+        a = E(e, t);
+      if (Object.getOwnPropertySymbols) {
+        var o = Object.getOwnPropertySymbols(e);
+        for (r = 0; r < o.length; r++)
+          (n = o[r]),
+            t.indexOf(n) >= 0 ||
+              (Object.prototype.propertyIsEnumerable.call(e, n) &&
+                (a[n] = e[n]));
+      }
+      return a;
+    }
+    function S(e, t) {
+      return C(e) || L(e, t) || T(e, t) || N();
+    }
+    function C(e) {
+      if (Array.isArray(e)) return e;
+    }
+    function L(e, t) {
+      if ('undefined' !== typeof Symbol && Symbol.iterator in Object(e)) {
+        var n = [],
+          r = !0,
+          a = !1,
+          o = void 0;
+        try {
+          for (
+            var i, c = e[Symbol.iterator]();
+            !(r = (i = c.next()).done);
+            r = !0
+          )
+            if ((n.push(i.value), t && n.length === t)) break;
+        } catch (l) {
+          (a = !0), (o = l);
+        } finally {
+          try {
+            r || null == c['return'] || c['return']();
+          } finally {
+            if (a) throw o;
+          }
+        }
+        return n;
+      }
+    }
+    function T(e, t) {
+      if (e) {
+        if ('string' === typeof e) return D(e, t);
+        var n = Object.prototype.toString.call(e).slice(8, -1);
+        return (
+          'Object' === n && e.constructor && (n = e.constructor.name),
+          'Map' === n || 'Set' === n
+            ? Array.from(e)
+            : 'Arguments' === n ||
+              /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)
+            ? D(e, t)
+            : void 0
+        );
+      }
+    }
+    function D(e, t) {
+      (null == t || t > e.length) && (t = e.length);
+      for (var n = 0, r = new Array(t); n < t; n++) r[n] = e[n];
+      return r;
+    }
+    function N() {
+      throw new TypeError(
+        'Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.',
+      );
+    }
+    function P(e, t, n) {
+      return (
+        t in e
+          ? Object.defineProperty(e, t, {
+              value: n,
+              enumerable: !0,
+              configurable: !0,
+              writable: !0,
+            })
+          : (e[t] = n),
+        e
+      );
+    }
+    function Y(e, t) {
+      var n = Object.keys(e);
+      if (Object.getOwnPropertySymbols) {
+        var r = Object.getOwnPropertySymbols(e);
+        t &&
+          (r = r.filter(function (t) {
+            return Object.getOwnPropertyDescriptor(e, t).enumerable;
+          })),
+          n.push.apply(n, r);
+      }
+      return n;
+    }
+    function A(e) {
+      for (var t = 1; t < arguments.length; t++) {
+        var n = null != arguments[t] ? arguments[t] : {};
+        t % 2
+          ? Y(Object(n), !0).forEach(function (t) {
+              P(e, t, n[t]);
+            })
+          : Object.getOwnPropertyDescriptors
+          ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(n))
+          : Y(Object(n)).forEach(function (t) {
+              Object.defineProperty(
+                e,
+                t,
+                Object.getOwnPropertyDescriptor(n, t),
+              );
+            });
+      }
+      return e;
+    }
+    function R() {
+      for (var e = arguments.length, t = new Array(e), n = 0; n < e; n++)
+        t[n] = arguments[n];
+      return function (e) {
+        return t.reduceRight(function (e, t) {
+          return t(e);
+        }, e);
+      };
+    }
+    function I(e) {
+      return function t() {
+        for (
+          var n = this, r = arguments.length, a = new Array(r), o = 0;
+          o < r;
+          o++
+        )
+          a[o] = arguments[o];
+        return a.length >= e.length
+          ? e.apply(this, a)
+          : function () {
+              for (
+                var e = arguments.length, r = new Array(e), o = 0;
+                o < e;
+                o++
+              )
+                r[o] = arguments[o];
+              return t.apply(n, [].concat(a, r));
+            };
+      };
+    }
+    function H(e) {
+      return {}.toString.call(e).includes('Object');
+    }
+    function F(e) {
+      return !Object.keys(e).length;
+    }
+    function z(e) {
+      return 'function' === typeof e;
+    }
+    function W(e, t) {
+      return Object.prototype.hasOwnProperty.call(e, t);
+    }
+    function K(e, t) {
+      return (
+        H(t) || $('changeType'),
+        Object.keys(t).some(function (t) {
+          return !W(e, t);
+        }) && $('changeField'),
+        t
+      );
+    }
+    function V(e) {
+      z(e) || $('selectorType');
+    }
+    function B(e) {
+      z(e) || H(e) || $('handlerType'),
+        H(e) &&
+          Object.values(e).some(function (e) {
+            return !z(e);
+          }) &&
+          $('handlersType');
+    }
+    function U(e) {
+      e || $('initialIsRequired'),
+        H(e) || $('initialType'),
+        F(e) && $('initialContent');
+    }
+    function q(e, t) {
+      throw new Error(e[t] || e['default']);
+    }
+    var G = {
+        initialIsRequired: 'initial state is required',
+        initialType: 'initial state should be an object',
+        initialContent: "initial state shouldn't be an empty object",
+        handlerType: 'handler should be an object or a function',
+        handlersType: 'all handlers should be a functions',
+        selectorType: 'selector should be a function',
+        changeType: 'provided value of changes should be an object',
+        changeField:
+          'it seams you want to change a field in the state which is not specified in the "initial" state',
+        default: 'an unknown error accured in `state-local` package',
+      },
+      $ = I(q)(G),
+      J = { changes: K, selector: V, handler: B, initial: U };
+    function X(e) {
+      var t =
+        arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
+      J.initial(e), J.handler(t);
+      var n = { current: e },
+        r = I(ee)(n, t),
+        a = I(Z)(n),
+        o = I(J.changes)(e),
+        i = I(Q)(n);
+      function c() {
+        var e =
+          arguments.length > 0 && void 0 !== arguments[0]
+            ? arguments[0]
+            : function (e) {
+                return e;
+              };
+        return J.selector(e), e(n.current);
+      }
+      function l(e) {
+        R(r, a, o, i)(e);
+      }
+      return [c, l];
+    }
+    function Q(e, t) {
+      return z(t) ? t(e.current) : t;
+    }
+    function Z(e, t) {
+      return (e.current = A(A({}, e.current), t)), t;
+    }
+    function ee(e, t, n) {
+      return (
+        z(t)
+          ? t(e.current)
+          : Object.keys(n).forEach(function (n) {
+              var r;
+              return null === (r = t[n]) || void 0 === r
+                ? void 0
+                : r.call(t, e.current[n]);
+            }),
+        n
+      );
+    }
+    var te = { create: X },
+      ne = te,
+      re = {
+        paths: {
+          vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.36.1/min/vs',
+        },
+      },
+      ae = re;
+    function oe(e) {
+      return function t() {
+        for (
+          var n = this, r = arguments.length, a = new Array(r), o = 0;
+          o < r;
+          o++
+        )
+          a[o] = arguments[o];
+        return a.length >= e.length
+          ? e.apply(this, a)
+          : function () {
+              for (
+                var e = arguments.length, r = new Array(e), o = 0;
+                o < e;
+                o++
+              )
+                r[o] = arguments[o];
+              return t.apply(n, [].concat(a, r));
+            };
+      };
+    }
+    var ie = oe;
+    function ce(e) {
+      return {}.toString.call(e).includes('Object');
+    }
+    var le = ce;
+    function se(e) {
+      return (
+        e || pe('configIsRequired'),
+        le(e) || pe('configType'),
+        e.urls ? (ue(), { paths: { vs: e.urls.monacoBase } }) : e
+      );
+    }
+    function ue() {
+      console.warn(fe.deprecation);
+    }
+    function de(e, t) {
+      throw new Error(e[t] || e['default']);
+    }
+    var fe = {
+        configIsRequired: 'the configuration object is required',
+        configType: 'the configuration object should be an object',
+        default: 'an unknown error accured in `@monaco-editor/loader` package',
+        deprecation:
+          "Deprecation warning!\n    You are using deprecated way of configuration.\n\n    Instead of using\n      monaco.config({ urls: { monacoBase: '...' } })\n    use\n      monaco.config({ paths: { vs: '...' } })\n\n    For more please check the link https://github.com/suren-atoyan/monaco-loader#config\n  ",
+      },
+      pe = ie(de)(fe),
+      me = { config: se },
+      he = me,
+      ve = function () {
+        for (var e = arguments.length, t = new Array(e), n = 0; n < e; n++)
+          t[n] = arguments[n];
+        return function (e) {
+          return t.reduceRight(function (e, t) {
+            return t(e);
+          }, e);
+        };
+      },
+      ge = ve;
+    function be(e, t) {
+      return (
+        Object.keys(t).forEach(function (n) {
+          t[n] instanceof Object && e[n] && Object.assign(t[n], be(e[n], t[n]));
+        }),
+        x(x({}, e), t)
+      );
+    }
+    var ye = be,
+      _e = { type: 'cancelation', msg: 'operation is manually canceled' };
+    function we(e) {
+      var t = !1,
+        n = new Promise(function (n, r) {
+          e.then(function (e) {
+            return t ? r(_e) : n(e);
+          }),
+            e['catch'](r);
+        });
+      return (
+        (n.cancel = function () {
+          return (t = !0);
+        }),
+        n
+      );
+    }
+    var Oe = we,
+      ke = ne.create({
+        config: ae,
+        isInitialized: !1,
+        resolve: null,
+        reject: null,
+        monaco: null,
+      }),
+      je = S(ke, 2),
+      xe = je[0],
+      Ee = je[1];
+    function Me(e) {
+      var t = he.config(e),
+        n = t.monaco,
+        r = M(t, ['monaco']);
+      Ee(function (e) {
+        return { config: ye(e.config, r), monaco: n };
+      });
+    }
+    function Se() {
+      var e = xe(function (e) {
+        var t = e.monaco,
+          n = e.isInitialized,
+          r = e.resolve;
+        return { monaco: t, isInitialized: n, resolve: r };
+      });
+      if (!e.isInitialized) {
+        if ((Ee({ isInitialized: !0 }), e.monaco))
+          return e.resolve(e.monaco), Oe(Ye);
+        if (window.monaco && window.monaco.editor)
+          return Ne(window.monaco), e.resolve(window.monaco), Oe(Ye);
+        ge(Ce, Te)(De);
+      }
+      return Oe(Ye);
+    }
+    function Ce(e) {
+      return document.body.appendChild(e);
+    }
+    function Le(e) {
+      var t = document.createElement('script');
+      return e && (t.src = e), t;
+    }
+    function Te(e) {
+      var t = xe(function (e) {
+          var t = e.config,
+            n = e.reject;
+          return { config: t, reject: n };
+        }),
+        n = Le(''.concat(t.config.paths.vs, '/loader.js'));
+      return (
+        (n.onload = function () {
+          return e();
+        }),
+        (n.onerror = t.reject),
+        n
+      );
+    }
+    function De() {
+      var e = xe(function (e) {
+          var t = e.config,
+            n = e.resolve,
+            r = e.reject;
+          return { config: t, resolve: n, reject: r };
+        }),
+        t = window.require;
+      t.config(e.config),
+        t(
+          ['vs/editor/editor.main'],
+          function (t) {
+            Ne(t), e.resolve(t);
+          },
+          function (t) {
+            e.reject(t);
+          },
+        );
+    }
+    function Ne(e) {
+      xe().monaco || Ee({ monaco: e });
+    }
+    function Pe() {
+      return xe(function (e) {
+        var t = e.monaco;
+        return t;
+      });
+    }
+    var Ye = new Promise(function (e, t) {
+        return Ee({ resolve: e, reject: t });
+      }),
+      Ae = { config: Me, init: Se, __getMonacoInstance: Pe },
+      Re = Ae,
+      Ie =
         (n('wsxI'),
         [
           'id',
@@ -1760,166 +2369,147 @@
           'theme',
           'codeRef',
           'minimapEnabled',
+          'onLoad',
+          'cdnPath',
         ]),
-      _ = ['mode'],
-      w = Object(u['memo'])(
-        (e) => {
-          var t = e.id,
-            n = void 0 === t ? 'code-container-'.concat(Math.random()) : t,
-            r = e.value,
-            a = void 0 === r ? '' : r,
-            l = e.onChange,
-            f = void 0 === l ? () => {} : l,
-            p = e.onSave,
-            m = void 0 === p ? () => {} : p,
-            h = e.style,
-            v = void 0 === h ? {} : h,
-            g = e.language,
-            b = void 0 === g ? 'javascript' : g,
-            _ = e.theme,
-            w = void 0 === _ ? 'vs-dark' : _,
-            O = e.codeRef,
-            k = void 0 === O ? Object(u['useRef'])({}) : O,
-            j = e.minimapEnabled,
-            x = void 0 === j || j,
-            E = s(e, y),
-            M = (function () {
-              var e = Object(c['a'])(
-                Object(o['a'])().mark(function e() {
-                  var t;
-                  return Object(o['a'])().wrap(function (e) {
-                    while (1)
-                      switch ((e.prev = e.next)) {
-                        case 0:
-                          if (((t = window.require), !t)) {
-                            e.next = 4;
-                            break;
-                          }
-                          return (
-                            t.config({
-                              paths: {
-                                vs: 'https://g.alicdn.com/code/lib/monaco-editor/0.36.0/min/vs',
-                              },
+      He = ['mode'],
+      Fe = Object(u['memo'])((e) => {
+        var t = e.id,
+          n = void 0 === t ? 'code-container-'.concat(Math.random()) : t,
+          r = e.value,
+          a = void 0 === r ? '' : r,
+          l = e.onChange,
+          f = void 0 === l ? () => {} : l,
+          p = e.onSave,
+          m = e.style,
+          h = void 0 === m ? {} : m,
+          v = e.language,
+          g = void 0 === v ? 'javascript' : v,
+          b = e.theme,
+          y = void 0 === b ? 'vs-dark' : b,
+          _ = e.codeRef,
+          w = void 0 === _ ? Object(u['useRef'])({}) : _,
+          k = e.minimapEnabled,
+          j = void 0 === k || k,
+          x = e.onLoad,
+          E = void 0 === x ? () => {} : x,
+          M = e.cdnPath,
+          S =
+            void 0 === M
+              ? 'https://g.alicdn.com/code/lib/monaco-editor/0.36.1/min/vs'
+              : M,
+          C = s(e, Ie),
+          L = Object(u['useRef'])({}),
+          T = (e) => {
+            var t = e.editor.create(
+              document.getElementById(n),
+              Object(c['a'])(
+                {
+                  language: g,
+                  selectOnLineNumbers: !0,
+                  automaticLayout: !0,
+                  tabSize: 2,
+                  fontSize: 14,
+                  theme: y,
+                  fontWeight: '400',
+                  minimap: { enabled: j },
+                  scrollBeyondLastLine: !1,
+                  value: a,
+                },
+                C,
+              ),
+            );
+            return (
+              'function' === typeof p &&
+                t.addCommand(e.KeyMod.CtrlCmd | e.KeyCode.KeyS, () => {
+                  var e = t.getValue();
+                  p(e);
+                }),
+              t.onDidChangeModelContent((e) => {
+                var n = t.getValue();
+                ['javascript', 'typescript'].includes(g) &&
+                  (L.current = t.deltaDecorations(L.current, O(n))),
+                  e.isFlush || f(n);
+              }),
+              t
+            );
+          },
+          D = (function () {
+            var e = Object(i['a'])(
+              Object(o['a'])().mark(function e() {
+                return Object(o['a'])().wrap(function (e) {
+                  while (1)
+                    switch ((e.prev = e.next)) {
+                      case 0:
+                        return (
+                          Re.config({ paths: { vs: S } }),
+                          e.abrupt(
+                            'return',
+                            new Promise((e) => {
+                              Re.init().then((t) => {
+                                E(t),
+                                  'function' === typeof window.define &&
+                                    window.define.amd &&
+                                    delete window.define.amd,
+                                  e(T(t));
+                              });
                             }),
-                            e.abrupt(
-                              'return',
-                              new Promise((e) => {
-                                t(['vs/editor/editor.main'], () => {
-                                  var t = window.monaco;
-                                  t.languages.register({
-                                    id: 'tsx',
-                                    extensions: ['.tsx'],
-                                    aliases: ['TypeScript React'],
-                                    mimetypes: ['text/tsx'],
-                                  }),
-                                    t.languages.onLanguage('tsx', function () {
-                                      t.editor.defineTheme('myTheme', {
-                                        base: 'vs',
-                                        inherit: !1,
-                                        rules: [
-                                          {
-                                            token: 'comment',
-                                            foreground: 'ffa500',
-                                          },
-                                        ],
-                                      }),
-                                        t.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
-                                          {
-                                            noSemanticValidation: !1,
-                                            noSyntaxValidation: !1,
-                                          },
-                                        ),
-                                        t.languages.typescript.typescriptDefaults.setCompilerOptions(
-                                          {
-                                            target:
-                                              t.languages.typescript
-                                                .ScriptTarget.ES6,
-                                            jsx: t.languages.typescript.JsxEmit
-                                              .React,
-                                            allowJs: !0,
-                                          },
-                                        );
-                                    });
-                                  var r = t.editor.create(
-                                    document.getElementById(n),
-                                    Object(i['a'])(
-                                      {
-                                        language: b,
-                                        selectOnLineNumbers: !0,
-                                        automaticLayout: !0,
-                                        tabSize: 2,
-                                        fontSize: 14,
-                                        theme: w,
-                                        fontWeight: '400',
-                                        minimap: { enabled: x },
-                                        scrollBeyondLastLine: !1,
-                                        value: a,
-                                      },
-                                      E,
-                                    ),
-                                  );
-                                  r.addCommand(
-                                    t.KeyMod.CtrlCmd | t.KeyCode.KeyS,
-                                    () => {
-                                      var e = r.getValue();
-                                      m(e);
-                                    },
-                                  ),
-                                    r.onDidChangeModelContent((e) => {
-                                      var t = r.getValue();
-                                      e.isFlush || f(t);
-                                    }),
-                                    e(r);
-                                });
-                              }),
-                            )
-                          );
-                        case 4:
-                        case 'end':
-                          return e.stop();
-                      }
-                  }, e);
-                }),
-              );
-              return function () {
-                return e.apply(this, arguments);
-              };
-            })();
-          return (
-            Object(u['useEffect'])(() => {
-              var e = M();
-              k.current.getMonacoInstance = Object(c['a'])(
-                Object(o['a'])().mark(function t() {
-                  return Object(o['a'])().wrap(function (t) {
-                    while (1)
-                      switch ((t.prev = t.next)) {
-                        case 0:
-                          return t.abrupt('return', e);
-                        case 1:
-                        case 'end':
-                          return t.stop();
-                      }
-                  }, t);
-                }),
-              );
-            }, []),
-            d.a.createElement('div', {
-              id: n,
-              className: 'app-code-editor',
-              style: v,
-            })
-          );
-        },
-        () => !0,
-      ),
-      O = (e) => {
+                          )
+                        );
+                      case 2:
+                      case 'end':
+                        return e.stop();
+                    }
+                }, e);
+              }),
+            );
+            return function () {
+              return e.apply(this, arguments);
+            };
+          })();
+        return (
+          Object(u['useEffect'])(() => {
+            var e = D();
+            w.current.getMonacoInstance = Object(i['a'])(
+              Object(o['a'])().mark(function t() {
+                return Object(o['a'])().wrap(function (t) {
+                  while (1)
+                    switch ((t.prev = t.next)) {
+                      case 0:
+                        return t.abrupt('return', e);
+                      case 1:
+                      case 'end':
+                        return t.stop();
+                    }
+                }, t);
+              }),
+            );
+          }, []),
+          Object(u['useEffect'])(() => {
+            w.current.getMonacoInstance().then((e) => {
+              var t, n;
+              e &&
+                ((null !== (t = e.hasTextFocus) && void 0 !== t && t.call(e)) ||
+                  null === (n = e.setValue) ||
+                  void 0 === n ||
+                  n.call(e, a));
+            });
+          }, [a]),
+          d.a.createElement('div', {
+            id: n,
+            className: 'app-code-editor',
+            style: h,
+          })
+        );
+      }),
+      ze = (e) => {
         var t = e.mode,
-          n = s(e, _);
+          n = s(e, He);
         return 'function' === t
           ? d.a.createElement(b, n)
-          : d.a.createElement(w, n);
+          : d.a.createElement(Fe, n);
       },
-      k = (e) => {
+      We = (e) => {
         var t = e.code,
           n = void 0 === t ? '' : t,
           o = e.prefix,
@@ -1954,14 +2544,14 @@
           throw (console.log('catch parse error:', v), v);
         }
       },
-      j = (e) => {
+      Ke = (e) => {
         try {
           return btoa(encodeURIComponent(e));
         } catch (t) {
           return console.log(t), '';
         }
       },
-      x = (e) => {
+      Ve = (e) => {
         try {
           return decodeURIComponent(atob(e));
         } catch (t) {

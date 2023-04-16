@@ -37,6 +37,7 @@ export default defineConfig({
   scripts: [
     'https://g.alicdn.com/code/lib/babel-standalone/7.21.2/babel.min.js',
     'https://g.alicdn.com/code/lib/monaco-editor/0.36.0/min/vs/loader.min.js',
+    'https://g.alicdn.com/wisdomhammer/govding/prism.js',
   ],
   navs: [
     null, // null 值代表保留约定式生成的导航，只做增量配置
