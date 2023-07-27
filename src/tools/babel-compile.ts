@@ -4,6 +4,7 @@ const react = require('react');
 const ReactDOM = require('react-dom');
 const axios = require('axios');
 const moment = require('moment');
+const icons = require('@ant-design/icons');
 class BabelCompile {
   scope: any = {};
   exports = {};
@@ -14,6 +15,7 @@ class BabelCompile {
       moment,
       axios,
       antd,
+      '@ant-design/icons': icons,
       ...scope,
     };
   }
