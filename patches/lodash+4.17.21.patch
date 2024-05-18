@@ -1,0 +1,12 @@
+diff --git a/node_modules/lodash/isEmpty.js b/node_modules/lodash/isEmpty.js
+index 3597294..99c3882 100644
+--- a/node_modules/lodash/isEmpty.js
++++ b/node_modules/lodash/isEmpty.js
+@@ -51,6 +51,7 @@ var hasOwnProperty = objectProto.hasOwnProperty;
+  * // => false
+  */
+ function isEmpty(value) {
++  console.log('isEmpty -->',value)
+   if (value == null) {
+     return true;
+   }
